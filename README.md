@@ -11,6 +11,16 @@ Alertas duplicados são suprimidos — um novo e-mail só é enviado quando o es
 
 O projeto utiliza a **[brapi.dev](https://brapi.dev)** — API brasileira gratuita com cobertura de todos os ativos da B3 e criptoativos.
 
+## Decisões de design
+
+### Polling vs WebSocket
+
+A abordagem ideal para monitorar preços em tempo real seria utilizar uma conexão **WebSocket** — onde o servidor notifica o cliente a cada mudança de preço, eliminando a necessidade de consultas periódicas, reduzindo a latência do alerta.
+
+Essa abordagem foi considerada durante o desenvolvimento, mas não foi possível implementá-la para ativos da B3 pois **não foi encontrada nenhuma API gratuita que ofereça streaming via WebSocket para o mercado brasileiro**. As APIs testadas que disponibilizam esse recurso ([Finnhub Stock API](https://finnhub.io/) e [Alpaca](https://alpaca.markets/)) ou são pagas ou voltadas ao mercado americano no plano gratuito.
+
+Assim, a solução adotada foi **Polling** — consultas periódicas à API da brapi.dev em intervalos configuráveis via `PollingIntervalMs` no `appsettings.json`.
+
 ## Arquitetura
 
 ```
